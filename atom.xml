@@ -1,24 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
+  <title><![CDATA[A Beginner's Adventures in Codeland]]></title>
   <link href="http://dnajjar.github.io/atom.xml" rel="self"/>
   <link href="http://dnajjar.github.io/"/>
-  <updated>2015-05-12T13:14:38-04:00</updated>
+  <updated>2015-05-12T13:44:45-04:00</updated>
   <id>http://dnajjar.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Dana Najjar]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
-    <title type="html"><![CDATA[My First Post on Octopress]]></title>
+    <title type="html"><![CDATA[Understanding Git: A Beginner's Guide]]></title>
     <link href="http://dnajjar.github.io/blog/2015/05/12/my-first-post-on-octopress/"/>
     <updated>2015-05-12T13:14:23-04:00</updated>
     <id>http://dnajjar.github.io/blog/2015/05/12/my-first-post-on-octopress</id>
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<p>Note - the first few paragraphs are not git related, so please feel free to skip ahead and ignore my ramblings.</p>
+
+<p>In one of my previous incarnations, I worked as a business analyst at a financial tech startup here in New York. We were a small team, and sharply divided along product and tech lines. I spent my days counting down the clock, and cultivating severe developer envy. I wanted to be on the side that builds things, but I had no idea how to get there.</p>
+
+<p>Anyway, every once in a while I would overhear someone on the tech side say they had submitted a pool request, which invariably evoked the image of a crisp limpid pool in a clearing in the middle of a lush forest (very specific imagery I know). I had a vague notion that they were all requesting permission to push their code to this pool where all code lives happily ever after. or something like that.</p>
+
+<p>It wasn&rsquo;t until last week that I figured out they had actually been saying pull, not pool. In any case, this post is about git, and my struggle to make sense of it. It&rsquo;s motivated by a strong suspicion on my part that you could get away with using git for a very long time without actually understanding how it works. Cloning, adding, comitting, and pushing are motions that are simple enough to go through, and there are loads of tutorials on how to set git up and get it working just enough to be lulled into a false sense of competence.</p>
+
+<p>Which is not to say that there aren&rsquo;t loads of really great resources for learning git - there absolutely are. I just couldn&rsquo;t find any that tried explain it to me like I was a slower-than-average 5 year old with limited computer knowledge.</p>
+
+<p>So what is git? git is a version control system. We all know that. But here&rsquo;s how I wish someone had explained the basics to me from the user&rsquo;s side of things, without going into under the hood mechanics:</p>
+
+<p>You&rsquo;re sitting at your desk, working on your 3 volume memoir, when it hits you that the paragraph you deleted yesterday was the key to the whole story, and you would give anything to get it back. There should be a way to keep track of changes and be able to get back older versions!</p>
+
+<p>But wait, there is! It&rsquo;s called git! Wonderful. So you download git, create a github account like everyone tells you to, run git init from the command line to get things going, then realize you have no idea where to go from there.</p>
+
+<p>What happened when you ran git init? A new repository was created in the folder you&rsquo;re currently in, which you can think of as an empty directory waiting to store whatever you decide to put in it.</p>
+
+<p>Ok. So you get back to work on your novel, and decide you want to store the current version in the new git directory, just in case you need to come back to it later. One catch: your directory doesn&rsquo;t know about that version yet. You need to create a channel between your version and the git directory by using git add novel. Once that&rsquo;s done, your git repository becomes aware of your version and you can store a copy of it by saying git commit<em> -m &ldquo;first novel commit&rdquo;</em>. The -m lets you add a message so you know what you&rsquo;ve committed.</p>
+
+<p>So far so good. Everytime you have a working version that you want to save, you can just go through the same process. Let&rsquo;s say you finished your novel and started proofreading, and want to commit any edits that you make. Running git status will tell you if there are any changes to your file that haven&rsquo;t been added or committed yet, so you can make sure not to miss anything.</p>
+
+<p>So now you have a repository that stores all past versions of your novel. One catch: the repository is on your laptop, so if you throw it out the window in the throes of an existential crisis, well then that&rsquo;s the end of that. You need to store the repository remotely! That&rsquo;s where github comes in. It&rsquo;s one of many remote repositories you can use to store your commits somewhere safe.</p>
+
+<p>And here&rsquo;s where things get fancy. You decide to collaborate on your memoir with your long lost evil twin, but the two of you can&rsquo;t be in the same room together.</p>
 ]]></content>
   </entry>
   
