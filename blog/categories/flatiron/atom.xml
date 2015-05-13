@@ -4,7 +4,7 @@
   <title><![CDATA[Category: flatiron | A Beginner's Adventures in Codeland]]></title>
   <link href="http://dnajjar.github.io/blog/categories/flatiron/atom.xml" rel="self"/>
   <link href="http://dnajjar.github.io/"/>
-  <updated>2015-05-12T22:27:10-04:00</updated>
+  <updated>2015-05-12T22:30:15-04:00</updated>
   <id>http://dnajjar.github.io/</id>
   <author>
     <name><![CDATA[Dana Najjar]]></name>
@@ -212,9 +212,9 @@ result == my_string # => false
   
   <entry>
     <title type="html"><![CDATA[Understanding Git: A Beginner's Guide (Part I)]]></title>
-    <link href="http://dnajjar.github.io/blog/2015/04/06/my-first-post-on-octopress/"/>
+    <link href="http://dnajjar.github.io/blog/2015/04/06/understanding-git/"/>
     <updated>2015-04-06T13:14:23-04:00</updated>
-    <id>http://dnajjar.github.io/blog/2015/04/06/my-first-post-on-octopress</id>
+    <id>http://dnajjar.github.io/blog/2015/04/06/understanding-git</id>
     <content type="html"><![CDATA[<p>Note - the first few paragraphs are not git related, so please feel free to skip ahead and ignore my ramblings.</p>
 
 <p>In one of my previous incarnations, I worked as a business analyst at a financial tech startup here in New York. We were a small team, and sharply divided along product and tech lines. I spent my days counting down the clock, and cultivating severe developer envy. I wanted to be on the side that builds things, but I had no idea how to get there.</p>
