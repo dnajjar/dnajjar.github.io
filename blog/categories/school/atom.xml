@@ -4,7 +4,7 @@
   <title><![CDATA[Category: school | A Beginner's Adventures in Codeland]]></title>
   <link href="http://dnajjar.github.io/blog/categories/school/atom.xml" rel="self"/>
   <link href="http://dnajjar.github.io/"/>
-  <updated>2015-05-12T22:14:30-04:00</updated>
+  <updated>2015-05-12T22:18:21-04:00</updated>
   <id>http://dnajjar.github.io/</id>
   <author>
     <name><![CDATA[Dana Najjar]]></name>
@@ -12,6 +12,98 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to tell whether a string is numeric in Ruby]]></title>
+    <link href="http://dnajjar.github.io/blog/2015/04/17/how-to-tell-whether-a-string-is-numeric-in-ruby/"/>
+    <updated>2015-04-17T22:15:50-04:00</updated>
+    <id>http://dnajjar.github.io/blog/2015/04/17/how-to-tell-whether-a-string-is-numeric-in-ruby</id>
+    <content type="html"><![CDATA[<p>An issue that&rsquo;s come up for me several times in my three short weeks of learning Ruby is how to tell whether a string is numeric. In other words, given a string, is there some way to tell whether it&rsquo;s really just an integer masquerading as a string?</p>
+
+<p>Why, you might ask, would an integer be masquerading as a string in the first place? Identity crises aside, let&rsquo;s say you build a program that asks the user for input. Let&rsquo;s use a jukebox command line app as an example. You list all the songs you can play for your user by name and number, and ask them what they&rsquo;d like to hear. Your code might look something like this:</p>
+
+<blockquote><p>user_input = gets.chomp
+Let&rsquo;s say you want to support different kinds of input: your user has the option of giving you a song name, or of choosing a song by number. How your code responds to their input will have to depend on whether they entered a song name - in which case you would need to retrieve the song based on the string they entered - or a song number - in which case you would need to retrieve the song indexed at the number they entered. You might be thinking: why don&rsquo;t we just call user_input.class and know right away what we&rsquo;re dealing with? Unfortunately, it&rsquo;s not that simple. The &ldquo;s&rdquo; in &ldquo;gets&rdquo; stands for &ldquo;string&rdquo;, so anything the user types gets converted into a string. But don&rsquo;t panic! There are several different ways to tell if your string is really just a number dressed up in fancy quotes. Let&rsquo;s look at 3 different ways to write an integer? method that returns true if our string is an integer in quotes, and false otherwise. All three can handle positive and negative integers, but only the first (regex way) can handle floats.</p></blockquote>
+
+<p>The Regular Expressions Way
+&#8220;`</p>
+
+<blockquote><p>class String                                     <br/>
+  def integer?                            <br/>
+    /\A[-+]?\d+\z/ === self
+    end
+  end
+&#8220;`</p></blockquote>
+
+<p>This regular expression is giving the following instructions: go to the beginning of the string and look for 0 or 1 &ldquo;+&rdquo; or &ldquo;-&rdquo; signs, followed by one or more digits, followed by the end of the string. Let&rsquo;s look at some examples:</p>
+
+<pre><code>&gt; "-3".integer? # =&gt; true
+&gt; "2".integer? # =&gt; true
+&gt; "one".integer? # =&gt; false 
+&gt; "ISWEARIMANUMBER".integer? # =&gt; false 
+&gt; "12345SURPRISE789".integer? # =&gt; false 
+</code></pre>
+
+<p>If you wanted to update your regular expression to handle floats, then these are the instructions you&rsquo;d want to give: start at the beginning of the string, look for 0 or 1 &ldquo;+&rdquo; or &ldquo;-&rdquo; signs, followed by 1 or more integers, followed by 0 or 1 &ldquo;.&rdquo;&rsquo;s, followed by one or more integers, followed by the end of the string. Here&rsquo;s what that looks like:
+<code>
+/^[-+]?[0-9]+\.?[0-9]+$/
+</code>
+The Easy Way</p>
+
+<p>I like this method best. It&rsquo;s simple and elegant, and takes advantage of the fact that you can call to_i on any string in Ruby, and get back &ldquo;the result of interpreting leading characters in str as an integer&rdquo; (from www.ruby-doc.org). What this means is that Ruby will look for an integer in your string, and once it finds one, discard any trailing characters. If it doesn&rsquo;t find any integers, it returns 0. So &ldquo;1&rdquo;.to_i is 1, while &ldquo;one&rdquo;.to_i is 0, and &ldquo;99 red balloons&rdquo;.to_i is 99. Calling to_s on the result will return the original string if and only if it was an integer without any trailing characters.
+&#8220;`</p>
+
+<blockquote><p>class String
+ def integer?
+   self.to_i.to_s == self
+ end
+end
+<code>
+Let's look at how this works:
+</code>
+my_string = &ldquo;1&rdquo;
+result = my_string.to_i # => 1
+result.to_s # => &ldquo;1&rdquo;
+result == my_string # => true
+my_string = &ldquo;one&rdquo;
+result = my_string.to_i # => 0
+result.to_s # => &ldquo;0&rdquo;
+result == my_string # => false
+&#8220;`</p></blockquote>
+
+<p>Now let&rsquo;s use the integer? method</p>
+
+<pre><code>&gt; "one".integer? # =&gt; false 
+&gt; "1".integer? #=&gt; true 
+&gt; "99 red balloons".integer? # =&gt; false 
+</code></pre>
+
+<p>The only shortcoming of this method is that while you could write a regular expression to match decimals, calling to_i will always return an integer.</p>
+
+<p>The Hard Way</p>
+
+<p>Here&rsquo;s another way you could do it, though somewhat less intuitive. Calling Integer(str) with a string argument will do one of two things:</p>
+
+<p>1- Return the string.to_i if string.to_i is not 0
+2- Throw an error if string.to_i is 0</p>
+
+<p>We ultimately want our integer? method to return a boolean, but all Integer(str) does is either return an integer or throw an error. We can fix that by calling !!Integer(str) and putting that in a begin rescue block that returns false, so that our method returns true if Integer(str) returns an, integer and false if it throws an error. This works because integers are truthy in Ruby, meaning the return value of !int is false, and of !!int is true. Keep in mind that if we didn&rsquo;t specify a return value of false after the begin rescue block, it would default to nil.</p>
+
+<pre><code>&gt; class String
+&gt;   def integer?
+&gt;    begin
+&gt;       !!Integer(self)
+&gt;     rescue ArgumentError, TypeError
+&gt;       false
+&gt;     end
+&gt;   end
+&gt;  end
+&gt; "one".integer? # =&gt; false
+&gt; "1".integer? # =&gt; true
+&gt; "1.1".integer # =&gt; false
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Understanding Git: A Beginner's Guide (Part I)]]></title>
