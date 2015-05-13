@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://dnajjar.github.io/blog/2015/05/13/dummy/</loc>
+    <lastmod>2015-05-13T13:20:40-04:00</lastmod>
+  </url>
+  <url>
     <loc>http://dnajjar.github.io/blog/2015/04/30/ruby-pass-by-value-or-reference/</loc>
     <lastmod>2015-04-30T22:21:09-04:00</lastmod>
   </url>
