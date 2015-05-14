@@ -2,25 +2,31 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://dnajjar.github.io/blog/2015/05/13/dummy/</loc>
-    <lastmod>2015-05-13T13:20:40-04:00</lastmod>
+    <lastmod>2015-05-13T00:00:00-04:00</lastmod>
   </url>
   <url>
     <loc>http://dnajjar.github.io/blog/2015/04/30/ruby-pass-by-value-or-reference/</loc>
-    <lastmod>2015-04-30T22:21:09-04:00</lastmod>
+    <lastmod>2015-04-30T13:14:23-04:00</lastmod>
   </url>
   <url>
     <loc>http://dnajjar.github.io/blog/2015/04/17/how-to-tell-whether-a-string-is-numeric-in-ruby/</loc>
-    <lastmod>2015-04-17T22:15:50-04:00</lastmod>
+    <lastmod>2015-04-17T13:14:23-04:00</lastmod>
   </url>
   <url>
     <loc>http://dnajjar.github.io/blog/2015/04/06/understanding-git/</loc>
     <lastmod>2015-04-06T13:14:23-04:00</lastmod>
   </url>
   <url>
-    <loc>http://dnajjar.github.io/blog/archives/</loc>
+    <loc>http://dnajjar.github.io/404.html</loc>
   </url>
   <url>
     <loc>http://dnajjar.github.io/archives/</loc>
+  </url>
+  <url>
+    <loc>http://dnajjar.github.io/blog/archives/</loc>
+  </url>
+  <url>
+    <loc>http://dnajjar.github.io/blog/gallery/</loc>
   </url>
   <url>
     <loc>http://dnajjar.github.io/blog/</loc>
@@ -33,5 +39,9 @@
   </url>
   <url>
     <loc>http://dnajjar.github.io/blog/categories/school/</loc>
+  </url>
+  <url>
+    <loc>http://dnajjar.github.io/assets/font-awesome/docs/index.html</loc>
+    <lastmod>2015-05-13T22:41:08-04:00</lastmod>
   </url>
 </urlset>

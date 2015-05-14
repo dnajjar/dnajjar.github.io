@@ -1,0 +1,333 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>How to tell whether a string is numeric in Ruby - Curiouser and Curiouser</title>
+  <meta name="author" content="Dana Najjar">
+
+  
+  <meta name="description" content="An issue that&rsquo;s come up for me several times in my three short weeks of learning Ruby is how to tell whether a string is numeric. In other &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://dnajjar.github.io/blog/2015/04/17/how-to-tell-whether-a-string-is-numeric-in-ruby">
+  <link href="/favicon.ico" rel="icon">
+  
+  <link href="/assets/bootstrap/css/spacelab.min.css" rel="stylesheet" type="text/css">
+  <link href="/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
+  <link href="/assets/bootstrap/css/custom.css" rel="stylesheet" type="text/css">
+  <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css">
+  
+  <link href="/atom.xml" rel="alternate" title="Curiouser and Curiouser" type="application/atom+xml">
+  
+  
+
+</head>
+
+<body    data-spy="scroll">
+
+  <div class="container">
+    <header class="jumbotron subhead" id="overview">
+      
+<div class="subscribe">
+  <table>
+    <tr>
+      <td><span>Get Updates: &nbsp;</span></td>
+      
+      
+      <td><a href="/atom.xml" class="btn"><i class="icon-cog"></i> By RSS</a></td>
+      
+      
+    </tr>
+  </table>
+</div>
+
+<h1 class="title">Curiouser and Curiouser</h1>
+
+  <p class="lead">A Beginner&#8217;s Adventures in Codeland</p>
+
+
+      <div class="navbar">
+  <div class="navbar-inner">
+    <div class="container" style="width: auto;">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <div class="nav-collapse">
+                <ul class="nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives">Blog</a></li>
+          <li><a href="/projects">Projects</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+
+        
+          <form action="https://www.google.com/search" method="get" class="navbar-search pull-left">
+            <fieldset role="search">
+              <input type="hidden" name="q" value="site:dnajjar.github.io" />
+              <input type="text" name="q" results="0" placeholder="Search" class="search-query span2" />
+            </fieldset>
+          </form>
+        
+        
+      </div><!-- /.nav-collapse -->
+    </div>
+  </div><!-- /navbar-inner -->
+</div>
+
+    </header>
+    <div id="main">
+      <div id="content">
+        <div class="row">
+  
+  <div class="span8">
+    
+  <header>
+    
+      <h1 class="entry-title">How to Tell Whether a String Is Numeric in Ruby</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-17T13:14:23-04:00" pubdate data-updated="true"></time>
+        
+      </p>
+    
+  </header>
+
+
+  
+  
+  <div class="entry-content"><p>An issue that&rsquo;s come up for me several times in my three short weeks of learning Ruby is how to tell whether a string is numeric. In other words, given a string, is there some way to tell whether it&rsquo;s really just an integer masquerading as a string?</p>
+
+<p>Why, you might ask, would an integer be masquerading as a string in the first place? Identity crises aside, let&rsquo;s say you build a program that asks the user for input. Let&rsquo;s use a jukebox command line app as an example. You list all the songs you can play for your user by name and number, and ask them what they&rsquo;d like to hear. Your code might look something like this:</p>
+
+<blockquote><p>user_input = gets.chomp</p></blockquote>
+
+<p>Let&rsquo;s say you want to support different kinds of input: your user has the option of giving you a song name, or of choosing a song by number. How your code responds to their input will have to depend on whether they entered a song name - in which case you would need to retrieve the song based on the string they entered - or a song number - in which case you would need to retrieve the song indexed at the number they entered. You might be thinking: why don&rsquo;t we just call user_input.class and know right away what we&rsquo;re dealing with? Unfortunately, it&rsquo;s not that simple. The &ldquo;s&rdquo; in &ldquo;gets&rdquo; stands for &ldquo;string&rdquo;, so anything the user types gets converted into a string. But don&rsquo;t panic! There are several different ways to tell if your string is really just a number dressed up in fancy quotes. Let&rsquo;s look at 3 different ways to write an integer? method that returns true if our string is an integer in quotes, and false otherwise. All three can handle positive and negative integers, but only the first (regex way) can handle floats.</p>
+
+<p>The Regular Expressions Way</p>
+
+<blockquote><p>class String                                     <br/>
+  def integer?                            <br/>
+    /\A[-+]?\d+\z/ === self
+    end
+  end
+This regular expression is giving the following instructions: go to the beginning of the string and look for 0 or 1 &ldquo;+&rdquo; or &ldquo;-&rdquo; signs, followed by one or more digits, followed by the end of the string. Let&rsquo;s look at some examples:</p>
+
+<p>&ldquo;-3&rdquo;.integer? # => true
+&ldquo;2&rdquo;.integer? # => true
+&ldquo;one&rdquo;.integer? # => false
+&ldquo;ISWEARIMANUMBER&rdquo;.integer? # => false
+&ldquo;12345SURPRISE789&rdquo;.integer? # => false
+If you wanted to update your regular expression to handle floats, then these are the instructions you&rsquo;d want to give: start at the beginning of the string, look for 0 or 1 &ldquo;+&rdquo; or &ldquo;-&rdquo; signs, followed by 1 or more integers, followed by 0 or 1 &ldquo;.&rdquo;&rsquo;s, followed by one or more integers, followed by the end of the string. Here&rsquo;s what that looks like:</p></blockquote>
+
+<p>/^[-+]?[0-9]+.?[0-9]+$/
+The Easy Way</p>
+
+<p>I like this method best. It&rsquo;s simple and elegant, and takes advantage of the fact that you can call to_i on any string in Ruby, and get back &ldquo;the result of interpreting leading characters in str as an integer&rdquo; (from www.ruby-doc.org). What this means is that Ruby will look for an integer in your string, and once it finds one, discard any trailing characters. If it doesn&rsquo;t find any integers, it returns 0. So &ldquo;1&rdquo;.to_i is 1, while &ldquo;one&rdquo;.to_i is 0, and &ldquo;99 red balloons&rdquo;.to_i is 99. Calling to_s on the result will return the original string if and only if it was an integer without any trailing characters.</p>
+
+<blockquote><p>class String
+ def integer?
+   self.to_i.to_s == self
+ end
+end
+Let&rsquo;s look at how this works:</p>
+
+<p>my_string = &ldquo;1&rdquo;
+result = my_string.to_i # => 1
+result.to_s # => &ldquo;1&rdquo;
+result == my_string # => true
+my_string = &ldquo;one&rdquo;
+result = my_string.to_i # => 0
+result.to_s # => &ldquo;0&rdquo;
+result == my_string # => false
+Now let&rsquo;s use the integer? method</p>
+
+<p>&ldquo;one&rdquo;.integer? # => false
+&ldquo;1&rdquo;.integer? #=> true
+&ldquo;99 red balloons&rdquo;.integer? # => false
+The only shortcoming of this method is that while you could write a regular expression to match decimals, calling to_i will always return an integer.</p></blockquote>
+
+<p>The Hard Way</p>
+
+<p>Here&rsquo;s another way you could do it, though somewhat less intuitive. Calling Integer(str) with a string argument will do one of two things:</p>
+
+<p>1- Return the string.to_i if string.to_i is not 0
+2- Throw an error if string.to_i is 0</p>
+
+<p>We ultimately want our integer? method to return a boolean, but all Integer(str) does is either return an integer or throw an error. We can fix that by calling !!Integer(str) and putting that in a begin rescue block that returns false, so that our method returns true if Integer(str) returns an, integer and false if it throws an error. This works because integers are truthy in Ruby, meaning the return value of !int is false, and of !!int is true. Keep in mind that if we didn&rsquo;t specify a return value of false after the begin rescue block, it would default to nil.</p>
+
+<blockquote><p>class String
+  def integer?
+   begin
+      !!Integer(self)
+    rescue ArgumentError, TypeError
+      false
+    end
+  end
+ end
+&ldquo;one&rdquo;.integer? # => false
+&ldquo;1&rdquo;.integer? # => true
+&ldquo;1.1&rdquo;.integer # => false</p></blockquote>
+</div>
+
+  
+
+
+    <footer>
+      <p class="meta">
+        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Dana Najjar</span></span>
+
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-17T13:14:23-04:00" pubdate data-updated="true"></time>
+        
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/flatiron/'>flatiron</a>, <a class='category' href='/blog/categories/school/'>school</a>
+  
+</span>
+
+
+      </p>
+      
+        <div class="sharing">
+  <br/>
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://dnajjar.github.io/blog/2015/04/17/how-to-tell-whether-a-string-is-numeric-in-ruby/" data-via="" data-counturl="http://dnajjar.github.io/blog/2015/04/17/how-to-tell-whether-a-string-is-numeric-in-ruby/" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+      <p class="meta">
+        
+          <a class="basic-alignment pull-left" href="/blog/2015/04/06/understanding-git/" title="Previous Post: Understanding Git: A Beginner's Guide (Part I)">&laquo; Understanding Git: A Beginner&#8217;s Guide (Part I)</a>
+        
+        
+          <a class="basic-alignment pull-right" href="/blog/2015/04/30/ruby-pass-by-value-or-reference/" title="Next Post: Ruby: pass by value or reference?">Ruby: pass by value or reference? &raquo;</a>
+        
+      </p>
+    </footer>
+    
+    
+  </div>
+
+  
+    
+  <div class="span sidebar">
+    <div class="well">
+      
+        <section>
+  <h2>Recent Posts</h2>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/05/13/dummy/">Dummy</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/30/ruby-pass-by-value-or-reference/">Ruby: pass by value or reference?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/17/how-to-tell-whether-a-string-is-numeric-in-ruby/">How to tell whether a string is numeric in Ruby</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/06/understanding-git/">Understanding Git: A Beginner&#8217;s Guide (Part I)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+      
+    </div>
+  </div>
+
+
+  
+</div>
+
+
+      </div>
+    </div>
+    <footer class="footer"><p>
+  Copyright &copy; 2015 - Dana Najjar -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> -
+  
+    <span class="credit">Theme by <a href="http://brianarmstrong.org">Brian Armstrong</a></span>
+  
+</p>
+</footer>
+    
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+    
+    $(document).ready(function(){
+      getTwitterFeed("", , );
+    });
+  </script>
+
+
+  </div>
+</body>
+</html>

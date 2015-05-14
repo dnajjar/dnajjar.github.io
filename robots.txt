@@ -1,4 +1,2 @@
 User-agent: *
-Disallow: 
-
-Sitemap: http://dnajjar.github.io/sitemap.xml 
+Allow: /

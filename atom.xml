@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[A Beginner's Adventures in Codeland]]></title>
+  <title><![CDATA[Curiouser and Curiouser]]></title>
   <link href="http://dnajjar.github.io/atom.xml" rel="self"/>
   <link href="http://dnajjar.github.io/"/>
-  <updated>2015-05-12T22:14:30-04:00</updated>
+  <updated>2015-05-13T23:24:40-04:00</updated>
   <id>http://dnajjar.github.io/</id>
   <author>
     <name><![CDATA[Dana Najjar]]></name>
@@ -14,10 +14,188 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Dummy]]></title>
+    <link href="http://dnajjar.github.io/blog/2015/05/13/dummy/"/>
+    <updated>2015-05-13T00:00:00-04:00</updated>
+    <id>http://dnajjar.github.io/blog/2015/05/13/dummy</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby: pass by value or reference?]]></title>
+    <link href="http://dnajjar.github.io/blog/2015/04/30/ruby-pass-by-value-or-reference/"/>
+    <updated>2015-04-30T13:14:23-04:00</updated>
+    <id>http://dnajjar.github.io/blog/2015/04/30/ruby-pass-by-value-or-reference</id>
+    <content type="html"><![CDATA[<p>The confusing part
+If you ask the internet whether Ruby is a pass-by-value or pass-by-reference language, it will resoundingly answer that ruby is pass by value. End of story. But if you listen carefully, you can hear a few muffled voices yelling that this is nowhere near the end of the story. The whole truth is that Ruby does things a little differently, and a precise answer would be that Ruby passes arguments by value, and values by reference. Don&rsquo;t worry, that made no sense to me the first 20 times I read it either. But first things first. What does it mean to pass by reference or value?</p>
+
+<p>When you instantiate a variable, you&rsquo;re telling your computer that you want to store that variable somewhere in memory.</p>
+
+<blockquote><p>str = &ldquo;hello&rdquo;
+str.object_id #=> 70219331102480
+In this case, we&rsquo;re creating a variable &ldquo;str&rdquo; that points to a location in physical memory where the string &ldquo;hello&rdquo; is being kept (the object_id references that location).</p></blockquote>
+
+<p>In Ruby, when you create a second variable and set it equal to the first,
+the second variable is now pointing at the same location in memory as the first.</p>
+
+<blockquote><p>str2 = string
+str2.object_id #=> 70219331102480
+str2 has the same object id as str, which tells us that they&rsquo;re both pointing at the same object in memory. Here&rsquo;s a good visualization from Stack Overflow</p></blockquote>
+
+<p>Keep this in mind and we&rsquo;ll come back to it soon. Let&rsquo;s switch gears a little bit and think about what happens to a variable when it gets passed to a method. In other words, how is it getting passed? What does the method know about its caller?</p>
+
+<p>Programming languages can handle this in one of two ways: the argument can be passed directly into the method, in which case the method has full access to it. There is no difference between the argument outside the method and the argument inside of the method. This is called passing by reference.</p>
+
+<p>Alternatively, the method can get its own copy of the argument which is identical to the first but points to a different location in memory. This is called passing by value (the method only has access to the value of the argument, not its reference in memory).</p>
+
+<p>So far so good.</p>
+
+<p>So why isn&rsquo;t this the end of the story? Because Ruby does things a little differently. When a variable calls a method in Ruby, the method is not given full access to that variable. In other words, the variable is not passed by reference. On the other hand, the method is not given its own separate copy, so the variable is not passed by value either. How is this possible? Because the method is given a copy of the variable pointing to the same location in memory. Remember the first thing we talked about? That&rsquo;s what&rsquo;s happening (now would be a good time to peek at the drawing). The argument being passed into the method is a copy of the original argument, but points to the same reference in memory.</p>
+
+<p>This has a lot of interesting (and confusing ramifications). Let&rsquo;s look at some examples.</p>
+
+<blockquote><p>def angry(string)
+ string = &ldquo;SO ANGRY&rdquo;
+end
+some_string = &ldquo;warevs&rdquo;
+angry(some_string) #=> &ldquo;SO ANGRY&rdquo;
+some_string #=> &ldquo;warevs&rdquo;
+The method didn&rsquo;t modify the original string, even though it had access to it. How is this possible? Because the method was given a copy of the object, not the object itself. When the method reassigned its copy and told it to point somewhere new in memory, the original object remained blissfully unaware. Let&rsquo;s try another example.</p>
+
+<p>def please_leave(string)
+ string.replace(&ldquo;goodbye&rdquo;)
+end
+some_string = &ldquo;hello&rdquo;
+please_leave(some_string) #=> &ldquo;goodbye&rdquo;
+some_string #=> &ldquo;goodbye&rdquo;
+Unlike the first example, the please_leave method changed the argument that got passed into it. WHAT? For the uninitiated, it might look like Ruby is an extremely unreliable language. After all, where would programming be without determinism? You may be able to guess what&rsquo;s coming next: Ruby&rsquo;s behavior is still completely deterministic.</p></blockquote>
+
+<p>The Simple Truth
+What it all comes down to is the return values of different methods.
+Again, what? It&rsquo;s pretty simple: some methods return new objects with new addresses in memory, and some methods modify their original callers and then return them.</p>
+
+<p>Let&rsquo;s look at a method that returns an entirely new object than the one that called it.</p>
+
+<blockquote><p>string = &ldquo;hello&rdquo;
+loud_string = string.upcase #=> &ldquo;HELLO&rdquo;
+string.object_id      #=> 70248691530340
+loud_string.object_id #=> 70248691495780
+Notice that string and loud_string have different object ids. They are different objects, and are stored in different memory locations.
+Now let&rsquo;s look at a method that modifies its caller and then returns it:</p>
+
+<p>array = [1,2,3]
+new_array = array.push(4) #=> [1,2,3,4]
+array.object_id          => 70248691406240
+new_array.object_id      => 70248691406240
+Notice that array and new_array have the same object ids, even though they are different arrays. The push method reached into the location where array was stored in memory, and changed its contents. It returned the same object, but only after it had modified it. Think of this like reaching into a box, modifying the contents, and then putting it back in its place. You haven&rsquo;t created a new box, just changed the contents of the existing one. (Just in case that wasn&rsquo;t clear, the location in memory is the box, the object is its contents).</p></blockquote>
+
+<p>Wrapping it up
+To summarize, a method&rsquo;s copy of its argument is pointing at the same location in memory as the argument itself. If the method is one that returns a new object, the original argument will remain unchanged outside the method. On the other hand, if the method is one that modifies its argument, all copies of the argument will now point at a location whose contents have been modified (think box again.)</p>
+
+<p>How on earth are you supposed to know the return values of every method in Ruby? It will come with practice, and keep in mind that adding a ! to a method tells it to modify the original object instead of returning a new one.</p>
+
+<blockquote><p>string = &ldquo;hello&rdquo;
+loud_string = string.upcase! #=> &ldquo;HELLO&rdquo;
+string.object_id      #=> 70248691530340
+loud_string.object_id #=> 70248691530340
+Finally, some objects in Ruby have fixed ids, meaning that they will always point to the same location in memory. Integers, true, false and nil have their own special homes. The integer 5 will point to 11 on Monday, Tuesday and every other day of this week and every week. What this means is that a method will never be able to modify an argument if that argument is one of these special objects, because any modification will automatically be a reassignment. There is no way to reach into an integer&rsquo;s box and change the contents, because Ruby decided that nothing but that integer can ever be in that box.</p>
+
+<p>def change(num)
+ num+1
+end
+num = 5
+new_num = change(num) #=> 6
+num.object_id #=> 11
+new_num.object_id #=> 13</p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to tell whether a string is numeric in Ruby]]></title>
+    <link href="http://dnajjar.github.io/blog/2015/04/17/how-to-tell-whether-a-string-is-numeric-in-ruby/"/>
+    <updated>2015-04-17T13:14:23-04:00</updated>
+    <id>http://dnajjar.github.io/blog/2015/04/17/how-to-tell-whether-a-string-is-numeric-in-ruby</id>
+    <content type="html"><![CDATA[<p>An issue that&rsquo;s come up for me several times in my three short weeks of learning Ruby is how to tell whether a string is numeric. In other words, given a string, is there some way to tell whether it&rsquo;s really just an integer masquerading as a string?</p>
+
+<p>Why, you might ask, would an integer be masquerading as a string in the first place? Identity crises aside, let&rsquo;s say you build a program that asks the user for input. Let&rsquo;s use a jukebox command line app as an example. You list all the songs you can play for your user by name and number, and ask them what they&rsquo;d like to hear. Your code might look something like this:</p>
+
+<blockquote><p>user_input = gets.chomp</p></blockquote>
+
+<p>Let&rsquo;s say you want to support different kinds of input: your user has the option of giving you a song name, or of choosing a song by number. How your code responds to their input will have to depend on whether they entered a song name - in which case you would need to retrieve the song based on the string they entered - or a song number - in which case you would need to retrieve the song indexed at the number they entered. You might be thinking: why don&rsquo;t we just call user_input.class and know right away what we&rsquo;re dealing with? Unfortunately, it&rsquo;s not that simple. The &ldquo;s&rdquo; in &ldquo;gets&rdquo; stands for &ldquo;string&rdquo;, so anything the user types gets converted into a string. But don&rsquo;t panic! There are several different ways to tell if your string is really just a number dressed up in fancy quotes. Let&rsquo;s look at 3 different ways to write an integer? method that returns true if our string is an integer in quotes, and false otherwise. All three can handle positive and negative integers, but only the first (regex way) can handle floats.</p>
+
+<p>The Regular Expressions Way</p>
+
+<blockquote><p>class String                                     <br/>
+  def integer?                            <br/>
+    /\A[-+]?\d+\z/ === self
+    end
+  end
+This regular expression is giving the following instructions: go to the beginning of the string and look for 0 or 1 &ldquo;+&rdquo; or &ldquo;-&rdquo; signs, followed by one or more digits, followed by the end of the string. Let&rsquo;s look at some examples:</p>
+
+<p>&ldquo;-3&rdquo;.integer? # => true
+&ldquo;2&rdquo;.integer? # => true
+&ldquo;one&rdquo;.integer? # => false
+&ldquo;ISWEARIMANUMBER&rdquo;.integer? # => false
+&ldquo;12345SURPRISE789&rdquo;.integer? # => false
+If you wanted to update your regular expression to handle floats, then these are the instructions you&rsquo;d want to give: start at the beginning of the string, look for 0 or 1 &ldquo;+&rdquo; or &ldquo;-&rdquo; signs, followed by 1 or more integers, followed by 0 or 1 &ldquo;.&rdquo;&rsquo;s, followed by one or more integers, followed by the end of the string. Here&rsquo;s what that looks like:</p></blockquote>
+
+<p>/^[-+]?[0-9]+.?[0-9]+$/
+The Easy Way</p>
+
+<p>I like this method best. It&rsquo;s simple and elegant, and takes advantage of the fact that you can call to_i on any string in Ruby, and get back &ldquo;the result of interpreting leading characters in str as an integer&rdquo; (from www.ruby-doc.org). What this means is that Ruby will look for an integer in your string, and once it finds one, discard any trailing characters. If it doesn&rsquo;t find any integers, it returns 0. So &ldquo;1&rdquo;.to_i is 1, while &ldquo;one&rdquo;.to_i is 0, and &ldquo;99 red balloons&rdquo;.to_i is 99. Calling to_s on the result will return the original string if and only if it was an integer without any trailing characters.</p>
+
+<blockquote><p>class String
+ def integer?
+   self.to_i.to_s == self
+ end
+end
+Let&rsquo;s look at how this works:</p>
+
+<p>my_string = &ldquo;1&rdquo;
+result = my_string.to_i # => 1
+result.to_s # => &ldquo;1&rdquo;
+result == my_string # => true
+my_string = &ldquo;one&rdquo;
+result = my_string.to_i # => 0
+result.to_s # => &ldquo;0&rdquo;
+result == my_string # => false
+Now let&rsquo;s use the integer? method</p>
+
+<p>&ldquo;one&rdquo;.integer? # => false
+&ldquo;1&rdquo;.integer? #=> true
+&ldquo;99 red balloons&rdquo;.integer? # => false
+The only shortcoming of this method is that while you could write a regular expression to match decimals, calling to_i will always return an integer.</p></blockquote>
+
+<p>The Hard Way</p>
+
+<p>Here&rsquo;s another way you could do it, though somewhat less intuitive. Calling Integer(str) with a string argument will do one of two things:</p>
+
+<p>1- Return the string.to_i if string.to_i is not 0
+2- Throw an error if string.to_i is 0</p>
+
+<p>We ultimately want our integer? method to return a boolean, but all Integer(str) does is either return an integer or throw an error. We can fix that by calling !!Integer(str) and putting that in a begin rescue block that returns false, so that our method returns true if Integer(str) returns an, integer and false if it throws an error. This works because integers are truthy in Ruby, meaning the return value of !int is false, and of !!int is true. Keep in mind that if we didn&rsquo;t specify a return value of false after the begin rescue block, it would default to nil.</p>
+
+<blockquote><p>class String
+  def integer?
+   begin
+      !!Integer(self)
+    rescue ArgumentError, TypeError
+      false
+    end
+  end
+ end
+&ldquo;one&rdquo;.integer? # => false
+&ldquo;1&rdquo;.integer? # => true
+&ldquo;1.1&rdquo;.integer # => false</p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Understanding Git: A Beginner's Guide (Part I)]]></title>
-    <link href="http://dnajjar.github.io/blog/2015/04/06/my-first-post-on-octopress/"/>
+    <link href="http://dnajjar.github.io/blog/2015/04/06/understanding-git/"/>
     <updated>2015-04-06T13:14:23-04:00</updated>
-    <id>http://dnajjar.github.io/blog/2015/04/06/my-first-post-on-octopress</id>
+    <id>http://dnajjar.github.io/blog/2015/04/06/understanding-git</id>
     <content type="html"><![CDATA[<p>Note - the first few paragraphs are not git related, so please feel free to skip ahead and ignore my ramblings.</p>
 
 <p>In one of my previous incarnations, I worked as a business analyst at a financial tech startup here in New York. We were a small team, and sharply divided along product and tech lines. I spent my days counting down the clock, and cultivating severe developer envy. I wanted to be on the side that builds things, but I had no idea how to get there.</p>
